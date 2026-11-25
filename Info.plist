@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleDisplayName</key>
+    <string>VCAMNEXTPRO</string>
+    <key>CFBundleExecutable</key>
+    <string>VCAMNEXTPRO</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.vcamnextpro.app</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>VCAMNEXTPRO</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>MinimumOSVersion</key>
+    <string>16.0</string>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>arm64</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UIUserInterfaceStyle</key>
+    <string>Dark</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Ứng dụng cần quyền truy cập bộ sưu tập để chọn hình ảnh và video làm nguồn camera.</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Ứng dụng cần truy cập mạng nội bộ để nhận luồng phát trực tiếp từ máy tính (OBS) qua Wi-Fi.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Ứng dụng cần quyền camera để đồng bộ và chuyển đổi luồng phát.</string>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+</dict>
+</plist>
