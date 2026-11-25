@@ -5,21 +5,21 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>VCAMNEXTPRO</string>
+    <string>VcamProVip</string>
     <key>CFBundleExecutable</key>
     <string>VCAMNEXTPRO</string>
     <key>CFBundleIdentifier</key>
-    <string>com.vcamnextpro.app</string>
+    <string>com.vcamprovip.app</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>VCAMNEXTPRO</string>
+    <string>VcamProVip</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>1.1.0</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>2</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>MinimumOSVersion</key>
@@ -34,12 +34,12 @@
     </array>
     <key>UIUserInterfaceStyle</key>
     <string>Dark</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Ứng dụng cần quyền truy cập bộ sưu tập để chọn hình ảnh và video làm nguồn camera.</string>
-    <key>NSLocalNetworkUsageDescription</key>
-    <string>Ứng dụng cần truy cập mạng nội bộ để nhận luồng phát trực tiếp từ máy tính (OBS) qua Wi-Fi.</string>
     <key>NSCameraUsageDescription</key>
-    <string>Ứng dụng cần quyền camera để đồng bộ và chuyển đổi luồng phát.</string>
+    <string>VcamProVip cần quyền Camera để hiển thị khung hình xem trước trực tiếp.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>VcamProVip cần quyền thư viện ảnh để chọn hình ảnh và video làm nguồn phát.</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>VcamProVip cần mạng nội bộ để nhận luồng OBS từ máy tính.</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
 </dict>
