@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Compile & Package IPA
-    runs-on: macos-13
+    runs-on: macos-15
 
     steps:
       - name: Checkout Code
