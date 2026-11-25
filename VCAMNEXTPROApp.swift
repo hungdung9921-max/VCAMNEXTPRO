@@ -1,6 +1,9 @@
 import SwiftUI
+import UIKit
+import Foundation
 import PhotosUI
 import Combine
+import Darwin
 
 // ==========================================
 // 1. DATA MODELS
@@ -202,7 +205,7 @@ struct HeaderView: View {
             Spacer()
         }
         .padding(16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(uiColor: .secondarySystemBackground))
         .cornerRadius(16)
     }
 }
@@ -250,7 +253,7 @@ struct AccountCardView: View {
             }
         }
         .padding(16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(uiColor: .secondarySystemBackground))
         .cornerRadius(16)
     }
 }
@@ -317,7 +320,7 @@ struct DeviceLinkCardView: View {
             }
         }
         .padding(16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(uiColor: .secondarySystemBackground))
         .cornerRadius(16)
     }
 }
@@ -354,3 +357,198 @@ struct DirectMediaCardView: View {
                 if vm.currentMedia.kind != .none {
                     Button(action: { vm.removeMedia() }) {
                         Image(systemName: "xmark.circle.fill").font(.system(size: 20)).foregroundColor(.gray).padding(10)
+                    }
+                }
+            }
+
+            HStack(spacing: 12) {
+                PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "photo").font(.system(size: 16, weight: .semibold))
+                        Text("Image").font(.system(size: 15, weight: .bold))
+                    }
+                    .frame(maxWidth: .infinity).padding(.vertical, 14).foregroundColor(.white)
+                    .background(Color(hex: "#0284C7")).cornerRadius(10)
+                }
+                .onChange(of: selectedPhoto) { _ in
+                    vm.updateMedia(kind: .image, title: "IMG_\(Int.random(in: 1000...9999)).JPG")
+                }
+
+                PhotosPicker(selection: $selectedVideo, matching: .videos) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "film").font(.system(size: 16, weight: .semibold))
+                        Text("Video").font(.system(size: 15, weight: .bold))
+                    }
+                    .frame(maxWidth: .infinity).padding(.vertical, 14).foregroundColor(.white)
+                    .background(Color(hex: "#EA580C")).cornerRadius(10)
+                }
+                .onChange(of: selectedVideo) { _ in
+                    vm.updateMedia(kind: .video, title: "VID_\(Int.random(in: 1000...9999)).MP4")
+                }
+            }
+        }
+        .padding(16)
+        .background(Color(uiColor: .secondarySystemBackground))
+        .cornerRadius(16)
+    }
+}
+
+struct CameraBehaviorCardView: View {
+    @EnvironmentObject var vm: AppViewModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Image(systemName: "slider.horizontal.2.square").foregroundColor(.gray)
+                Text("Camera behavior").font(.system(size: 15, weight: .semibold)).foregroundColor(.white)
+                Spacer()
+            }
+
+            HStack(spacing: 12) {
+                Image(systemName: "eyedropper.halffull").font(.system(size: 18)).foregroundColor(.gray)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Camera color sync").font(.system(size: 15, weight: .semibold)).foregroundColor(.white)
+                    Text("On - \(vm.config.selectedSyncArea.rawValue)").font(.system(size: 12)).foregroundColor(.gray)
+                }
+                Spacer()
+                Toggle("", isOn: $vm.config.isColorSyncEnabled).labelsHidden().tint(Color(hex: "#10B981"))
+            }
+
+            VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    Circle().fill(Color(hex: vm.config.screenSampleHex)).frame(width: 32, height: 32)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("SCREEN SAMPLE").font(.system(size: 11, weight: .bold)).foregroundColor(.gray)
+                        Text(vm.config.screenSampleHex).font(.system(size: 14, weight: .bold, design: .monospaced)).foregroundColor(.white)
+                    }
+                    Spacer()
+                    Image(systemName: "eyedropper").font(.system(size: 16)).foregroundColor(Color(hex: "#10B981"))
+                }
+
+                HStack(spacing: 6) {
+                    ForEach(SyncTargetArea.allCases) { area in
+                        Button(action: { vm.config.selectedSyncArea = area }) {
+                            Text(area.rawValue)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(vm.config.selectedSyncArea == area ? .black : .white)
+                                .frame(maxWidth: .infinity).padding(.vertical, 8)
+                                .background(vm.config.selectedSyncArea == area ? Color(hex: "#10B981") : Color(hex: "#262626"))
+                                .cornerRadius(8)
+                        }
+                    }
+                }
+            }
+            .padding(12).background(Color(hex: "#171717")).cornerRadius(12)
+
+            HStack(spacing: 12) {
+                Image(systemName: "square.2.layers.3d").font(.system(size: 18)).foregroundColor(.gray)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Floating control").font(.system(size: 15, weight: .semibold)).foregroundColor(.white)
+                    Text(vm.config.isFloatingControlEnabled ? "On" : "Off").font(.system(size: 12)).foregroundColor(.gray)
+                }
+                Spacer()
+                Toggle("", isOn: $vm.config.isFloatingControlEnabled).labelsHidden().tint(Color(hex: "#10B981"))
+            }
+
+            HStack {
+                Text(String(format: "X %.2f  Y +%.2f  %.2fx  R %.0f  F %@", vm.config.posX, vm.config.posY, vm.config.scale, vm.config.rotation, vm.config.isFlipped ? "ON" : "OFF"))
+                    .font(.system(size: 13, weight: .bold, design: .monospaced)).foregroundColor(.gray)
+                Spacer()
+                Button(action: { vm.resetTransform() }) {
+                    Image(systemName: "arrow.counterclockwise").font(.system(size: 18)).foregroundColor(Color(hex: "#10B981"))
+                }
+            }
+        }
+        .padding(16)
+        .background(Color(uiColor: .secondarySystemBackground))
+        .cornerRadius(16)
+    }
+}
+
+struct FloatingControlView: View {
+    @EnvironmentObject var vm: AppViewModel
+    @State private var offset: CGSize = CGSize(width: 140, height: 100)
+
+    var body: some View {
+        if vm.config.isFloatingControlEnabled {
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle().fill(Color.black.opacity(0.85)).frame(width: 48, height: 48)
+                        .overlay(Circle().stroke(Color(hex: "#10B981"), lineWidth: 2))
+                    Image(systemName: "camera.aperture").font(.system(size: 24, weight: .bold)).foregroundColor(Color(hex: "#10B981"))
+                }
+
+                Button(action: { vm.resetTransform() }) {
+                    ZStack {
+                        Circle().fill(Color.black.opacity(0.85)).frame(width: 44, height: 44)
+                            .overlay(Circle().stroke(Color.white.opacity(0.6), lineWidth: 1.5))
+                        Image(systemName: "scope").font(.system(size: 22, weight: .medium)).foregroundColor(.white)
+                    }
+                }
+            }
+            .offset(offset)
+            .gesture(DragGesture().onChanged { gesture in
+                offset = CGSize(width: gesture.translation.width + offset.width, height: gesture.translation.height + offset.height)
+            })
+        }
+    }
+}
+
+// ==========================================
+// 5. MAIN VIEW & APP ENTRY
+// ==========================================
+
+struct MainView: View {
+    @EnvironmentObject var vm: AppViewModel
+
+    var body: some View {
+        ZStack {
+            Color(hex: "#0C0C0E").ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                HStack {
+                    Text("VCAMNEXTPRO").font(.system(size: 17, weight: .bold)).foregroundColor(.white)
+                }
+                .padding(.top, 10).padding(.bottom, 8)
+
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 16) {
+                        HeaderView()
+                        AccountCardView()
+                        DeviceLinkCardView()
+                        DirectMediaCardView()
+                        CameraBehaviorCardView()
+                        Spacer(minLength: 40)
+                    }
+                    .padding(.horizontal, 16)
+                }
+            }
+
+            FloatingControlView()
+
+            if vm.showToast {
+                VStack {
+                    Spacer()
+                    Text(vm.toastMessage)
+                        .font(.system(size: 13, weight: .semibold)).foregroundColor(.white)
+                        .padding(.horizontal, 18).padding(.vertical, 10)
+                        .background(Capsule().fill(Color.black.opacity(0.85)).overlay(Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1)))
+                        .padding(.bottom, 30)
+                }
+            }
+        }
+    }
+}
+
+@main
+struct VCAMNEXTPROApp: App {
+    @StateObject private var viewModel = AppViewModel()
+
+    var body: some Scene {
+        WindowGroup {
+            MainView()
+                .environmentObject(viewModel)
+                .preferredColorScheme(.dark)
+        }
+    }
+}
