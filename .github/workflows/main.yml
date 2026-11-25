@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Compile & Package IPA
-   runs-on: macos-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout Code
@@ -21,7 +21,6 @@ jobs:
         run: |
           SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
           mkdir -p build/VCAMNEXTPRO.app
-          
           swiftc -target arm64-apple-ios16.0 \
             -sdk "$SDK_PATH" \
             -O \
@@ -34,7 +33,6 @@ jobs:
             -framework PhotosUI \
             -framework AVFoundation \
             -framework Network
-            
           cp Info.plist build/VCAMNEXTPRO.app/Info.plist
           ldid -SEntitlements.plist build/VCAMNEXTPRO.app/VCAMNEXTPRO
 
