@@ -352,7 +352,7 @@ struct DirectMediaCardView: View {
                     }
                     Spacer()
                 }
-                .padding(.horizontal, 16).frame(maxHeight: .infinity)
+                .padding(.horizontal, 16)
 
                 if vm.currentMedia.kind != .none {
                     Button(action: { vm.removeMedia() }) {
